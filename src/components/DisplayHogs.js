@@ -3,27 +3,46 @@ import HogCard from './HogCard'
 
 class DisplayHogs extends Component {
 
-  logHogs = (event) => {
-    console.log(this.props.hogs)
+  state = {
+    filter: null,
   }
 
-  // generateHogCards = () => {
-  //   return this.props.hogs.map(hog => <HogCard hog={hog}/>)
-  // }
+  renderHogs = () => {
+    return this.props.hogs.map(hog => {
+      if (this.state.filter === null) {
+        return <HogCard hog={hog}/>
+      } else {
+        return hog.greased ? <HogCard hog={hog} /> : null
+      }
+    })
+  }
+
+  handleFilterClick = (event) => {
+    console.log("You have clicked the filter button")
+    // iterate over each hog, access the 'greased'
+    // if greased => render its card, otherwise don't bother
+
+    if (this.state.filter === null) {
+      this.setState({filter: "a non null string"})
+    } else {
+      this.setState({filter: null})
+    }
+
+    // button 'show ungreased' -> undo
+  }
+
+  buttonText = () => {
+    return this.state.filter === null ? "Show only greased hogs" : "Show all hogs"
+  }
   
   render() {
-    const ourHog = this.props.hogs[0]
-    // console.log(ourHog)
-
     return (
       <div>
         <p>This is the display hogs component</p>
-        <button onClick={this.logHogs}>Log hogs (now we are in the display hogs component)</button>
+        <button onClick={this.handleFilterClick}>{this.buttonText()}</button>
         <div>
-          {this.props.hogs.map(hog => <HogCard hog={hog}/>)}
+          {this.renderHogs()}
         </div>
-        {/* this.props.pets.map(pet => )
-        <HogCard hog={ourHog} /> */}
       </div>
     )
   }
